@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Creation Platform</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="platform-header">
+        <h1>Welcome to the Portfolio Creator</h1>
+        <nav>
+            <button onclick="showLogin()">Login</button>
+            <button onclick="showSignup()">Signup</button>
+        </nav>
+    </header>
+    <main class="platform-main">
+        <section id="auth-section" class="hidden">
+            <div id="login-form" class="hidden">
+                <h2>Login</h2>
+                <form onsubmit="event.preventDefault(); login();">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" required>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" required>
+                    <button type="submit">Login</button>
+                </form>
+            </div>
+            <div id="signup-form" class="hidden">
+                <h2>Signup</h2>
+                <form onsubmit="event.preventDefault(); signup();">
+                    <label for="new-email">Email:</label>
+                    <input type="email" id="new-email" required>
+                    <label for="new-password">Password:</label>
+                    <input type="password" id="new-password" required>
+                    <button type="submit">Signup</button>
+                </form>
+            </div>
+        </section>
+        <section id="builder-section" class="hidden">
+            <h2>Portfolio Builder</h2>
+            <nav>
+                <button onclick="addSection('About Me')">Add About Me</button>
+                <button onclick="addSection('Projects')">Add Projects</button>
+                <button onclick="addSection('Gallery')">Add Gallery</button>
+                <button onclick="previewPortfolio()">Preview</button>
+            </nav>
+            <div id="portfolio-builder" class="builder-area">
+                <!-- Portfolio sections will appear here -->
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Portfolio Creator Platform</p>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase functions
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyBLexHTii4BmEME4O0PrvRAwxNFnLYvN3Y",
+          authDomain: "portfoliocreater-f3210.firebaseapp.com",
+          projectId: "portfoliocreater-f3210",
+          storageBucket: "portfoliocreater-f3210.firebasestorage.app",
+          messagingSenderId: "943764224456",
+          appId: "1:943764224456:web:a841efea10d6cae773e8fd",
+          measurementId: "G-LY07ZE4EK9"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+
+        // Firebase Sign-Up Function
+        async function signup() {
+          const email = document.getElementById('new-email').value;
+          const password = document.getElementById('new-password').value;
+          try {
+            await createUserWithEmailAndPassword(auth, email, password);
+            alert("Sign-up successful!");
+            showPortfolioBuilder();
+          } catch (error) {
+            alert(error.message);
+          }
+        }
+
+        // Firebase Login Function
+        async function login() {
+          const email = document.getElementById('email').value;
+          const password = document.getElementById('password').value;
+          try {
+            await signInWithEmailAndPassword(auth, email, password);
+            alert("Login successful!");
+            showPortfolioBuilder();
+          } catch (error) {
+            alert(error.message);
+          }
+        }
+
+        // Show Portfolio Builder after login/signup
+        function showPortfolioBuilder() {
+          document.getElementById('auth-section').classList.add('hidden');
+          document.getElementById('builder-section').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
